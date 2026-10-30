@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -32,6 +33,7 @@ import (
  - ADGUARD_HOST        : AdGuard Home base URL (e.g. http://192.168.1.1:3000)
  - ADGUARD_USER        : API username (your adguard user)
  - ADGUARD_PASS        : API password (your adguard pass)
+ - ADGUARD_PASS_FILE   : Path to a file containing the API password (takes precedence over ADGUARD_PASS)
  - EXPORTER_PORT       : Port to expose metrics (default: 9617)
  - SCRAPE_INTERVAL     : Interval (in seconds) to fetch new stats (default: 15)
  - LOG_LEVEL           : Logging level (options: DEBUG, INFO, WARN, ERROR — default: INFO)
@@ -55,6 +57,18 @@ func logX(level string, format string, args ...interface{}) {
 	if logLevelMap[level] <= currentLogLevel {
 		log.Printf("[%s] %s", level, fmt.Sprintf(format, args...))
 	}
+}
+
+func adguardPassword() (string) {
+	if passwordFile := os.Getenv("ADGUARD_PASS_FILE"); passwordFile != "" {
+		password, err := os.ReadFile(passwordFile)
+		if err != nil {
+			logX("ERROR", "Failed to read ADGUARD_PASS_FILE: %v", err)
+		}
+		return strings.TrimRight(string(password), "\r\n")
+	}
+
+	return os.Getenv("ADGUARD_PASS")
 }
 
 //function hash query
@@ -424,7 +438,7 @@ func fetchQueryLog() (*AdGuardQueryLog, error) {
 
 	host := os.Getenv("ADGUARD_HOST")
 	user := os.Getenv("ADGUARD_USER")
-	pass := os.Getenv("ADGUARD_PASS")
+	pass := adguardPassword()
 
 	url := host + "/control/querylog"
 
@@ -460,7 +474,7 @@ func fetchStats() (*AdGuardStats, error) {
 
 	host := os.Getenv("ADGUARD_HOST")
 	user := os.Getenv("ADGUARD_USER")
-	pass := os.Getenv("ADGUARD_PASS")
+	pass := adguardPassword()
 
 	url := host + "/control/stats"
 
@@ -497,7 +511,7 @@ func fetchStatus() (*AdGuardStatus, error) {
 
 	host := os.Getenv("ADGUARD_HOST")
 	user := os.Getenv("ADGUARD_USER")
-	pass := os.Getenv("ADGUARD_PASS")
+	pass := adguardPassword()
 
 	url := host + "/control/status"
 
@@ -747,7 +761,7 @@ func updateQueryLogMetrics() {
 	    queryCountByISP.WithLabelValues(isp, country).Inc()
         
 	    }
-	
+
 	}
 
 	logX("DEBUG",
