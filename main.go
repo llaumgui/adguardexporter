@@ -59,16 +59,16 @@ func logX(level string, format string, args ...interface{}) {
 	}
 }
 
-func adguardPassword() (string) {
+func adguardPassword() (string, error) {
 	if passwordFile := os.Getenv("ADGUARD_PASS_FILE"); passwordFile != "" {
 		password, err := os.ReadFile(passwordFile)
 		if err != nil {
-			logX("ERROR", "Failed to read ADGUARD_PASS_FILE: %v", err)
+			return "", fmt.Errorf("failed to read ADGUARD_PASS_FILE: %w", err)
 		}
-		return strings.TrimRight(string(password), "\r\n")
+		return strings.TrimRight(string(password), "\r\n"), nil
 	}
 
-	return os.Getenv("ADGUARD_PASS")
+	return os.Getenv("ADGUARD_PASS"), nil
 }
 
 //function hash query
@@ -438,7 +438,10 @@ func fetchQueryLog() (*AdGuardQueryLog, error) {
 
 	host := os.Getenv("ADGUARD_HOST")
 	user := os.Getenv("ADGUARD_USER")
-	pass := adguardPassword()
+	pass, err := adguardPassword()
+	if err != nil {
+		return nil, err
+	}
 
 	url := host + "/control/querylog"
 
@@ -474,7 +477,10 @@ func fetchStats() (*AdGuardStats, error) {
 
 	host := os.Getenv("ADGUARD_HOST")
 	user := os.Getenv("ADGUARD_USER")
-	pass := adguardPassword()
+	pass, err := adguardPassword()
+	if err != nil {
+		return nil, err
+	}
 
 	url := host + "/control/stats"
 
@@ -511,7 +517,10 @@ func fetchStatus() (*AdGuardStatus, error) {
 
 	host := os.Getenv("ADGUARD_HOST")
 	user := os.Getenv("ADGUARD_USER")
-	pass := adguardPassword()
+	pass, err := adguardPassword()
+	if err != nil {
+		return nil, err
+	}
 
 	url := host + "/control/status"
 
