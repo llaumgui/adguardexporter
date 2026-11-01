@@ -77,7 +77,7 @@ After that, you should got the output like this:
 | `ADGUARD_PASS`| AdGuard Home password (used when `ADGUARD_PASS_FILE` is unset) | One of `ADGUARD_PASS` or `ADGUARD_PASS_FILE` | `secretpassword` |
 | `ADGUARD_PASS_FILE` | Path to a file containing the AdGuard Home password (takes precedence over `ADGUARD_PASS`) | One of `ADGUARD_PASS` or `ADGUARD_PASS_FILE` | `/run/secrets/adguard_pass` |
 | `EXPORTER_PORT`   | Port to expose metrics (default: 9617) | ❌       | `9200`                       |
-| `SCRAPE_INTERVAL` | How often to scrape (default: 15s)    | ❌       | `30s`                        |
+| `SCRAPE_INTERVAL` | How often to scrape (default: `15` for 15s)    | ❌       | `30`                        |
 | `LOG_LEVEL`       | Log Level to analyze, INFO, WARN, DEBUG | ❌      | `DEBUG`,`WARN`,`INFO`        |
 
 ---
