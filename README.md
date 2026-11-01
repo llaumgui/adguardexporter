@@ -75,7 +75,7 @@ After that, you should got the output like this:
 | `ADGUARD_USER`| AdGuard Home username                 | ✅       | `admin`                      |
 | `ADGUARD_PASS`| AdGuard Home password                 | ✅       | `secretpassword`             |
 | `EXPORTER_PORT`   | Port to expose metrics (default: 9617) | ❌       | `9200`                       |
-| `SCRAPE_INTERVAL` | How often to scrape (default: 15s)    | ❌       | `30s`                        |
+| `SCRAPE_INTERVAL` | How often to scrape (default: `15` for 15s)    | ❌       | `30`                        |
 | `LOG_LEVEL`       | Log Level to analyze, INFO, WARN, DEBUG | ❌      | `DEBUG`,`WARN`,`INFO`        |
 
 ---
@@ -103,7 +103,7 @@ services:
       - ADGUARD_USER=<YOUR_ADGUARD_USERNAME>
       - ADGUARD_PASS=<YOUR_ADGUARD_PASSWORD>
       - EXPORTER_PORT=9617
-      - SCRAPE_INTERVAL=15s
+      - SCRAPE_INTERVAL=15
       - LOG_LEVEL=DEBUG
 ```
 

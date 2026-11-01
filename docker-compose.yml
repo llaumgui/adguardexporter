@@ -17,5 +17,5 @@ services:
       - ADGUARD_USER=<ADGUARD_USERNAME> # required
       - ADGUARD_PASS=<ADGUARD_PASSWORD> # required
       - EXPORTER_PORT=9200 # optional, default 9617
-      - SCRAPE_INTERVAL=15s # optional
+      - SCRAPE_INTERVAL=15 # optional
       - LOG_LEVEL=DEBUG # optional
